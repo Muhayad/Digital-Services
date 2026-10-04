@@ -1,0 +1,568 @@
+﻿
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>دخول النتائج</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f7f9fc;
+            color: #111b3a;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            height: 70px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 7%;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1737c8;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #1737c8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            padding: 70px 20px;
+        }
+
+        .box {
+            background: white;
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            text-align: center;
+            color: #687087;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+            .field label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            .field input {
+                width: 100%;
+                height: 50px;
+                border: 1px solid #d9deea;
+                border-radius: 11px;
+                padding: 0 15px;
+                font-size: 16px;
+                outline: none;
+                background: #fafbfe;
+            }
+
+                .field input:focus {
+                    border-color: #1737c8;
+                    background: white;
+                }
+
+        .continue-btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 11px;
+            background: #1737c8;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            .continue-btn:hover {
+                background: #102aa3;
+            }
+
+            .continue-btn:disabled {
+                opacity: .7;
+                cursor: not-allowed;
+            }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+            .message.error {
+                display: block;
+                background: #fee2e2;
+                color: #b91c1c;
+            }
+
+            .message.success {
+                display: block;
+                background: #dcfce7;
+                color: #166534;
+            }
+
+        .notice {
+            margin-top: 18px;
+            font-size: 13px;
+            color: #687087;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
+            .top-bar {
+                padding: 0 20px;
+            }
+
+            .content {
+                padding: 40px 16px;
+            }
+
+            .box {
+                padding: 22px 18px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="top-bar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <img src="images/img.ICO"
+                     alt="Logo"
+                     style="width:45px !important; height:45px !important; object-fit:contain !important;">
+            </div>
+
+            <span>
+                وزارة المالية - البنك المركزي
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <main class="content">
+
+        <div class="box">
+
+            <h1 class="title">
+               تسجيل الدخول 
+            </h1>
+
+            <p class="description">
+                أدخل الرمز 
+            </p>
+
+
+            <div class="field">
+
+                <label for="accessCode">
+                    رمز الدخول الموحد
+                </label>
+
+                <input type="password"
+                       id="accessCode"
+                       placeholder="أدخل الرمز"
+                       inputmode="numeric"
+                       autocomplete="off">
+
+            </div>
+
+
+            <button type="button"
+                    class="continue-btn"
+                    id="loginButton">
+
+                دخول
+
+            </button>
+
+
+            <div id="message" class="message"></div>
+
+
+            <p class="notice">
+                هذا الصفحة خاصة بالموظفين فقط.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        /* ==========================================
+           Supabase
+        ========================================== */
+
+        const SUPABASE_URL =
+            "https://nqyfshleabgtadsqgkaq.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_EM7bSRm7-_Jc3v4oYxzXiA_1qZK2u0V";
+
+
+        /* ==========================================
+           عناصر الصفحة
+        ========================================== */
+
+        const accessCode =
+            document.getElementById("accessCode");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const message =
+            document.getElementById("message");
+
+
+        /* ==========================================
+           رسالة
+        ========================================== */
+
+        function showMessage(text, type) {
+
+            message.textContent = text;
+
+            message.className =
+                "message " + type;
+
+        }
+
+
+        /* ==========================================
+           تسجيل الدخول
+        ========================================== */
+
+        async function checkCode() {
+
+            const code =
+                accessCode.value.trim();
+
+
+            if (!code) {
+
+                showMessage(
+                    "يرجى إدخال رمز الوصول.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "جاري التحقق...";
+
+
+            try {
+
+                /* ======================================
+                   التحقق من كلمة المرور
+                ====================================== */
+
+                const passwordResponse =
+                    await fetch(
+                        SUPABASE_URL +
+                        "/rest/v1/rpc/check_results_password",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "apikey": SUPABASE_KEY,
+                                "Authorization":
+                                    "Bearer " + SUPABASE_KEY,
+
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                entered_password: code
+                            })
+                        }
+                    );
+
+
+                const passwordResult =
+                    await passwordResponse.json();
+
+
+                console.log(
+                    "Password result:",
+                    passwordResult
+                );
+
+
+                if (!passwordResponse.ok) {
+
+                    console.error(
+                        "Password error:",
+                        passwordResult
+                    );
+
+                    showMessage(
+                        "حدث خطأ أثناء الاتصال بقاعدة البيانات.",
+                        "error"
+                    );
+
+                    loginButton.disabled = false;
+
+                    loginButton.textContent =
+                        "دخول";
+
+                    return;
+                }
+
+
+                /* ======================================
+                   كلمة المرور غير صحيحة
+                ====================================== */
+
+                if (passwordResult !== true) {
+
+                    showMessage(
+                        "رمز الوصول غير صحيح.",
+                        "error"
+                    );
+
+                    loginButton.disabled = false;
+
+                    loginButton.textContent =
+                        "دخول";
+
+                    return;
+                }
+
+
+                /* ======================================
+                   كلمة المرور صحيحة
+                ====================================== */
+
+                showMessage(
+                    "تم التحقق، جاري تحميل النتائج...",
+                    "success"
+                );
+
+                loginButton.textContent =
+                    "جاري تحميل النتائج...";
+
+
+                /* ======================================
+                   جلب النتائج
+                ====================================== */
+
+                const resultsResponse =
+                    await fetch(
+                        SUPABASE_URL +
+                        "/rest/v1/rpc/get_test_results",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "apikey": SUPABASE_KEY,
+                                "Authorization":
+                                    "Bearer " + SUPABASE_KEY,
+
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                entered_password: code
+                            })
+                        }
+                    );
+
+
+                const results =
+                    await resultsResponse.json();
+
+
+                console.log(
+                    "Results:",
+                    results
+                );
+
+
+                if (!resultsResponse.ok) {
+
+                    console.error(
+                        "Results error:",
+                        results
+                    );
+
+                    showMessage(
+                        "تم قبول الرمز ولكن حدث خطأ أثناء جلب النتائج.",
+                        "error"
+                    );
+
+                    loginButton.disabled = false;
+
+                    loginButton.textContent =
+                        "دخول";
+
+                    return;
+                }
+
+
+                /* ======================================
+                   لا توجد نتائج
+                ====================================== */
+
+                if (
+                    !Array.isArray(results) ||
+                    results.length === 0
+                ) {
+
+                    showMessage(
+                        "تم قبول الرمز، ولكن لا توجد نتائج مسجلة.",
+                        "error"
+                    );
+
+                    loginButton.disabled = false;
+
+                    loginButton.textContent =
+                        "دخول";
+
+                    return;
+                }
+
+
+                /* ======================================
+                   حفظ النتائج
+                ====================================== */
+
+                sessionStorage.setItem(
+                    "resultsAccess",
+                    "true"
+                );
+
+                sessionStorage.setItem(
+                    "supabaseResults",
+                    JSON.stringify(results)
+                );
+
+
+                /* ======================================
+                   الانتقال
+                ====================================== */
+
+                window.location.href =
+                    "result.html";
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Unexpected error:",
+                    error
+                );
+
+                showMessage(
+                    "حدث خطأ غير متوقع.",
+                    "error"
+                );
+
+                loginButton.disabled = false;
+
+                loginButton.textContent =
+                    "دخول";
+            }
+
+        }
+
+
+        /* ==========================================
+           زر الدخول
+        ========================================== */
+
+        loginButton.addEventListener(
+            "click",
+            checkCode
+        );
+
+
+        /* ==========================================
+           زر Enter
+        ========================================== */
+
+        accessCode.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+
+                    checkCode();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
+```

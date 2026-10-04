@@ -1,0 +1,717 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>الخدمات الرقمية</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f7f9fc;
+            color: #111b3a;
+        }
+
+
+        .page {
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+
+        .top-bar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #1737c8;
+        }
+
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #1737c8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+
+        /*
+         * مجموعة الأزرار في الشريط العلوي
+         */
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        /*
+         * زر عرض النتائج
+         */
+
+        .results-btn {
+            height: 42px;
+            padding: 0 16px;
+            border: 1px solid #1737c8;
+            border-radius: 10px;
+            background: white;
+            color: #1737c8;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+
+            .results-btn:hover {
+                background: #f0f3ff;
+            }
+
+
+        /*
+         * زر القائمة
+         */
+
+        .menu {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+
+        .content {
+            max-width: 1100px;
+            margin: auto;
+            padding: 55px 20px 60px;
+        }
+
+
+        .title {
+            text-align: center;
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+
+        .subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #687087;
+            margin-bottom: 45px;
+        }
+
+
+        .cards {
+            display: flex;
+            gap: 22px;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+
+        .card {
+            flex: 0 0 520px;
+            height: 310px;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+            background: #dfe7f7;
+        }
+
+
+            .card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+
+        .card-overlay {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 20px;
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .card-text h3 {
+            font-size: 20px;
+            margin-bottom: 7px;
+        }
+
+
+        .card-text p {
+            color: #697188;
+            font-size: 14px;
+        }
+
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #1737c8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 9px;
+            margin-bottom: 35px;
+        }
+
+
+        .dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #cbd2df;
+        }
+
+
+            .dot.active {
+                background: #1737c8;
+            }
+
+
+        .verification-box {
+            max-width: 520px;
+            margin: auto;
+            background: white;
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+        }
+
+
+        .verification-title {
+            text-align: center;
+            font-size: 21px;
+            margin-bottom: 22px;
+        }
+
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+
+            .field label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+
+            .field input {
+                width: 100%;
+                height: 50px;
+                border: 1px solid #d9deea;
+                border-radius: 11px;
+                padding: 0 15px;
+                font-size: 16px;
+                outline: none;
+                background: #fafbfe;
+            }
+
+
+                .field input:focus {
+                    border-color: #1737c8;
+                    background: white;
+                }
+
+
+        .continue-btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 11px;
+            background: #1737c8;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+            .continue-btn:hover {
+                background: #102aa3;
+            }
+
+
+        .error-message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #fee2e2;
+            color: #b91c1c;
+            text-align: center;
+            font-size: 14px;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .top-bar {
+                padding: 0 20px;
+            }
+
+
+            .top-actions {
+                gap: 6px;
+            }
+
+
+            .results-btn {
+                padding: 0 11px;
+                font-size: 13px;
+            }
+
+
+            .content {
+                padding-top: 35px;
+            }
+
+
+            .title {
+                font-size: 27px;
+            }
+
+
+            .subtitle {
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+
+
+            .cards {
+                justify-content: flex-start;
+                padding-right: 8px;
+            }
+
+
+            .card {
+                flex: 0 0 88vw;
+                height: 330px;
+            }
+
+
+            .verification-box {
+                padding: 22px 18px;
+            }
+
+           
+            .logo-icon img {
+                width: 15px;
+                height: 15px;
+                object-fit: contain;
+            }
+
+            
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="page">
+
+
+        <header class="top-bar">
+
+
+            
+            <div class="logo">
+
+                <div class="logo-icon">
+                    <img src="images/img.ICO"
+                         alt="Logo"
+                         style="width:45px !important; height:45px !important; object-fit:contain !important;">
+                </div>
+
+                <span>
+                    وزارة المالية - البنك المركزي
+                </span>
+
+            </div>
+            
+
+
+
+
+            <!-- أزرار الشريط العلوي -->
+
+            <div class="top-actions">
+
+
+                <!-- زر عرض النتائج -->
+
+                <button type="button"
+                        class="results-btn"
+                        onclick="openResults()">
+
+                    تسجيل الدخول
+
+                </button>
+
+
+                <!-- القائمة -->
+
+                <div class="menu">
+                    ☰
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <main class="content">
+
+
+            <h1 class="title">
+
+                تجربة رقمية صُممت لك
+
+            </h1>
+
+
+            <p class="subtitle">
+
+                خدمات بسيطة وسريعة تلبي احتياجاتك
+
+            </p>
+
+
+
+            <section class="cards">
+
+
+                <div class="card">
+
+
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80"
+                         alt="خدمات رقمية">
+
+
+                    <div class="card-overlay">
+
+
+                        <div class="card-text">
+
+
+                            <h3>
+                                خدماتك بين يديك
+                            </h3>
+
+
+                            <p>
+                                اكتشف الخدمات المتاحة
+                            </p>
+
+
+                        </div>
+
+
+                        <div class="card-icon">
+                            ✓
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="card">
+
+
+                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80"
+                         alt="خدمة العملاء">
+
+
+                    <div class="card-overlay">
+
+
+                        <div class="card-text">
+
+
+                            <h3>
+                                تجربة أسهل
+                            </h3>
+
+
+                            <p>
+                                خطوات بسيطة وسريعة
+                            </p>
+
+
+                        </div>
+
+
+                        <div class="card-icon">
+                            ★
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <div class="dots">
+
+
+                <span class="dot active"></span>
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+
+            </div>
+
+
+
+            <section class="verification-box">
+
+
+                <h2 class="verification-title">
+
+                    التحقق من البيانات
+
+                </h2>
+
+
+
+                <div class="field">
+
+
+                    <label for="referenceNumber">
+
+                       رقم الهوية
+
+                    </label>
+
+
+                    <input type="text"
+                           id="referenceNumber"
+                           placeholder="أدخل الهوية"
+                           inputmode="numeric"
+                           autocomplete="off">
+
+                </div>
+
+
+
+                <div class="field">
+
+
+                    <label for="requestDate">
+
+                        تاريخ الميلاد
+
+                    </label>
+
+
+                    <input type="date"
+                           id="requestDate"
+                           autocomplete="off"
+                           required>
+
+                </div>
+
+
+
+                <button type="button"
+                        class="continue-btn"
+                        onclick="continuePage()">
+
+                    متابعة
+
+                </button>
+
+
+
+                <div id="errorMessage"
+                     class="error-message">
+
+                    الرقم أو التاريخ غير صحيح،
+                    يرجى المحاولة مرة أخرى.
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <script>
+
+
+        function continuePage() {
+
+
+            const enteredNumber =
+                document
+                    .getElementById("referenceNumber")
+                    .value
+                    .trim();
+
+
+            const dateValue =
+                document
+                    .getElementById("requestDate")
+                    .value;
+
+
+            const errorMessage =
+                document
+                    .getElementById("errorMessage");
+
+
+
+            /*
+             * بيانات تجريبية فقط
+             */
+
+            const correctNumber =
+                "2605269006";
+
+
+            const correctDate =
+                "1993-05-03";
+
+
+
+            if (
+                enteredNumber === correctNumber &&
+                dateValue === correctDate
+            ) {
+
+
+                errorMessage.style.display =
+                    "none";
+
+
+                sessionStorage.setItem(
+                    "verificationPassed",
+                    "true"
+                );
+
+
+                window.location.href =
+                    "page2.html";
+
+
+            } else {
+
+
+                errorMessage.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+
+        /*
+         * فتح صفحة عرض النتائج
+         */
+
+        function openResults() {
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
+```

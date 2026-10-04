@@ -1,0 +1,630 @@
+﻿```html
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>النتائج</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f7f9fc;
+            color: #111b3a;
+            min-height: 100vh;
+        }
+
+
+        .top-bar {
+            height: 70px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 7%;
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1737c8;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #1737c8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .content {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 45px 20px;
+        }
+
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+
+        .description {
+            text-align: center;
+            color: #687087;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+
+        .table-box {
+            background: white;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
+            overflow-x: auto;
+        }
+
+
+        .success {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 11px;
+            background: #ecfdf5;
+            color: #047857;
+            font-weight: bold;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+
+        thead {
+            background: #1737c8;
+            color: white;
+        }
+
+
+        th {
+            padding: 15px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+
+        tbody tr:hover {
+            background: #eef2ff;
+        }
+
+
+        .number {
+            font-weight: bold;
+            color: #1737c8;
+        }
+
+
+        .empty {
+            text-align: center;
+            color: #b91c1c;
+            padding: 30px;
+            line-height: 1.8;
+        }
+
+
+        .back-btn {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 25px auto 0;
+            height: 52px;
+            border: none;
+            border-radius: 11px;
+            background: #1737c8;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+            .back-btn:hover {
+                background: #102aa3;
+            }
+
+
+        .notice {
+            margin-top: 18px;
+            font-size: 13px;
+            color: #687087;
+            text-align: center;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .top-bar {
+                padding: 0 20px;
+            }
+
+
+            .content {
+                padding: 30px 12px;
+            }
+
+
+            .title {
+                font-size: 24px;
+            }
+
+
+            .table-box {
+                padding: 12px;
+                border-radius: 16px;
+            }
+
+
+            th,
+            td {
+                padding: 12px 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header class="top-bar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ◆
+            </div>
+
+            <span>
+                اسم موقعك
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="content">
+
+
+        <h1 class="title">
+            النتائج
+        </h1>
+
+
+        <p class="description">
+            جميع البيانات المدخلة في النموذج التجريبي
+        </p>
+
+
+
+        <div class="table-box"
+             id="resultsBox">
+
+        </div>
+
+
+
+        <button class="back-btn"
+                onclick="goBack()">
+
+            العودة
+
+        </button>
+
+
+        <p class="notice">
+            هذا نموذج تجريبي للعرض المحلي فقط.
+        </p>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        /* ==========================================
+           التأكد من صلاحية الدخول
+        ========================================== */
+
+        const access =
+            sessionStorage.getItem(
+                "resultsAccess"
+            );
+
+
+        if (access !== "true") {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+
+        /* ==========================================
+           قراءة جميع النتائج
+        ========================================== */
+
+        const savedResults =
+            sessionStorage.getItem(
+                "supabaseResults"
+            );
+
+
+        const resultsBox =
+            document.getElementById(
+                "resultsBox"
+            );
+
+
+
+        /* ==========================================
+           لا توجد بيانات
+        ========================================== */
+
+        if (!savedResults) {
+
+            resultsBox.innerHTML = `
+
+                <div class="empty">
+
+                    لا توجد بيانات تجريبية محفوظة.
+
+                </div>
+
+            `;
+
+        }
+
+
+        else {
+
+            try {
+
+                const results =
+                    JSON.parse(
+                        savedResults
+                    );
+
+
+                /* ======================================
+                   التأكد أن النتائج مصفوفة
+                ====================================== */
+
+                if (
+                    !Array.isArray(results) ||
+                    results.length === 0
+                ) {
+
+                    resultsBox.innerHTML = `
+
+                        <div class="empty">
+
+                            لا توجد بيانات مسجلة.
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                else {
+
+
+                    /* ==================================
+                       إنشاء صفوف الجدول
+                    ================================== */
+
+                    let rows = "";
+
+
+                    results.forEach(
+                        function (data, index) {
+
+                            rows += `
+
+                                <tr>
+
+                                    <td class="number">
+                                        ${index + 1}
+                                    </td>
+
+
+                                    <td>
+                                        ${escapeHTML(
+                                data.relationship
+                            )}
+                                    </td>
+
+
+                                    <td>
+                                        ${escapeHTML(
+                                data.first_name
+                            )}
+                                    </td>
+
+
+                                    <td>
+                                        ${escapeHTML(
+                                data.nickname
+                            )}
+                                    </td>
+
+
+                                    <td>
+                                        ${escapeHTML(
+                                data.test_number
+                            )}
+                                    </td>
+
+
+                                    <td>
+                                        ${escapeHTML(
+                                formatDate(
+                                    data.created_at
+                                )
+                            )}
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }
+                    );
+
+
+                    /* ==================================
+                       إنشاء الجدول
+                    ================================== */
+
+                    resultsBox.innerHTML = `
+
+                        <div class="success">
+
+                            تم عرض جميع النتائج بنجاح
+                            — عدد السجلات:
+                            ${results.length}
+
+                        </div>
+
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        #
+                                    </th>
+
+                                    <th>
+                                        صلة القرابة
+                                    </th>
+
+                                    <th>
+                                        الاسم الأول
+                                    </th>
+
+                                    <th>
+                                        الاسم المتعارف عليه
+                                    </th>
+
+                                    <th>
+                                        رقم التجربة
+                                    </th>
+
+                                    <th>
+                                        وقت الإدخال
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                ${rows}
+
+                            </tbody>
+
+                        </table>
+
+                    `;
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                resultsBox.innerHTML = `
+
+                    <div class="empty">
+
+                        تعذر قراءة بيانات النتائج.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+
+        /* ==========================================
+           حماية النصوص
+        ========================================== */
+
+        function escapeHTML(value) {
+
+            return String(
+                value ?? ""
+            )
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+
+        /* ==========================================
+           تنسيق التاريخ
+        ========================================== */
+
+        function formatDate(value) {
+
+            if (!value) {
+
+                return "";
+
+            }
+
+
+            const date =
+                new Date(value);
+
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return value;
+
+            }
+
+
+            return date.toLocaleString(
+                "ar-SA"
+            );
+
+        }
+
+
+
+        /* ==========================================
+           العودة
+        ========================================== */
+
+        function goBack() {
+
+            sessionStorage.removeItem(
+                "resultsAccess"
+            );
+
+
+            sessionStorage.removeItem(
+                "supabaseResults"
+            );
+
+
+            window.location.href =
+                "index.html";
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```

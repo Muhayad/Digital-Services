@@ -1,0 +1,982 @@
+﻿
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>الأسئلة</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f7f9fc;
+            color: #111b3a;
+            min-height: 100vh;
+        }
+
+
+        .top-bar {
+            height: 70px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1737c8;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #1737c8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .content {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            padding: 45px 20px;
+        }
+
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+
+        .description {
+            text-align: center;
+            color: #687087;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+
+        .form-box {
+            background: white;
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
+        }
+
+
+        .question {
+            margin-bottom: 24px;
+        }
+
+
+        .question-title {
+            display: block;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+
+        .option {
+            border: 1px solid #d9deea;
+            border-radius: 11px;
+            padding: 13px;
+            cursor: pointer;
+            background: #fafbfe;
+        }
+
+
+            .option:hover {
+                border-color: #1737c8;
+            }
+
+
+            .option input {
+                margin-left: 8px;
+            }
+
+
+        .input-wrapper {
+            position: relative;
+        }
+
+
+        .text-input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #d9deea;
+            border-radius: 11px;
+            padding: 0 15px;
+            padding-left: 45px;
+            font-size: 16px;
+            outline: none;
+            background: #fafbfe;
+            transition: .2s;
+        }
+
+
+            .text-input:focus {
+                border-color: #1737c8;
+                background: white;
+            }
+
+
+        .input-wrapper.error .text-input {
+            border-color: #dc2626;
+            background: #fff7f7;
+        }
+
+
+        .error-icon {
+            display: none;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #dc2626;
+            font-size: 20px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+
+        .input-wrapper.error .error-icon {
+            display: block;
+        }
+
+
+        .field-error {
+            display: none;
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
+
+            .field-error.show {
+                display: block;
+            }
+
+
+        .submit-btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 11px;
+            background: #1737c8;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+            .submit-btn:hover {
+                background: #102aa3;
+            }
+
+
+            .submit-btn:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+
+
+        .notice {
+            margin-top: 18px;
+            font-size: 13px;
+            color: #687087;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        notice {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.8;
+            font-size: 15px;
+            margin: 20px 0;
+        }
+
+        .success-message {
+            display: none;
+            background: #ecfdf3;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.8;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+
+            .success-message.show {
+                display: block;
+            }
+
+
+        .server-error {
+            display: none;
+            background: #fff7f7;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+
+            .server-error.show {
+                display: block;
+            }
+
+
+        @media (max-width: 600px) {
+
+            .top-bar {
+                padding: 0 20px;
+            }
+
+
+            .content {
+                padding: 30px 16px;
+            }
+
+
+            .title {
+                font-size: 24px;
+            }
+
+
+            .form-box {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header class="top-bar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <img src="images/img.ICO"
+                     alt="Logo"
+                     style="width:45px !important; height:45px !important; object-fit:contain !important;">
+            </div>
+
+            <span>
+                وزارة المالية - البنك المركزي
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="content">
+
+
+        <h1 class="title">
+            أسئلة المتابعة
+        </h1>
+
+
+        <p class="description">
+            يرجى الإجابة عن الأسئلة التالية للمتابعة
+        </p>
+       
+
+
+        <div id="successMessage"
+             class="success-message">
+
+            تم التحقق، البيانات قيد المراجعة
+
+        </div>
+
+
+        <div id="serverError"
+             class="server-error">
+
+            حدث خطأ أثناء حفظ البيانات.
+            يرجى المحاولة مرة أخرى.
+
+        </div>
+
+
+
+        <form class="form-box"
+              id="questionsForm">
+
+
+            <!-- السؤال الأول -->
+
+            <div class="question">
+
+                <label class="question-title">
+
+                    السؤال الأول: صلة القرابة
+
+                </label>
+
+
+                <div class="options">
+
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="relationship"
+                               value="family"
+                               required>
+
+                        من العائلة
+
+                    </label>
+
+
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="relationship"
+                               value="friends">
+
+                        من الأصدقاء
+
+                    </label>
+
+
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="relationship"
+                               value="close-friends">
+
+                        من الأصدقاء المقربين
+
+                    </label>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- السؤال الثاني -->
+
+            <div class="question">
+
+                <label class="question-title"
+                       for="firstName">
+
+                    السؤال الثاني: الاسم الأول
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <input class="text-input"
+                           type="text"
+                           id="firstName"
+                           name="firstName"
+                           placeholder="أدخل الاسم الأول"
+                           autocomplete="off"
+                           required>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- السؤال الثالث -->
+
+            <div class="question">
+
+                <label class="question-title"
+                       for="nickname">
+
+                    السؤال الثالث: الاسم المتعارف عليه بينك و بين صاحب الهوية
+
+                </label>
+
+
+              
+                <div class="notice" style="
+    direction: rtl !important;
+    text-align: right !important;
+    color: red !important;
+    font-weight: bold !important;
+">
+                    <div>ملاحظة: يمكنك استخدام أي كلمة ترغب بها، دون التقيد بكلمة محددة.</div>
+                    <div>وذلك لأن صاحب الهوية هو من صرّح بذلك، كما أنه قام بإضافة الكلمات بنفسه.</div>
+                    <div>لذلك، جميع الكلمات المُدخلة مقبولة ولا توجد شروط أو سياسات عليها.</div>
+                    <div>ويتم التعامل مع البيانات بسرية تامة.</div>
+                </div>
+                
+
+
+
+                <div class="input-wrapper"
+                     id="nicknameWrapper">
+
+
+                    <input class="text-input"
+                           type="text"
+                           id="nickname"
+                           name="nickname"
+                           placeholder="أدخل الاسم"
+                           autocomplete="off"
+                           required>
+
+
+                    <span class="error-icon">
+                        ✕
+                    </span>
+
+
+                </div>
+
+
+                <div id="nicknameError"
+                     class="field-error">
+
+                    الاسم غير مضاف بالبيانات.
+
+                </div>
+
+            </div>
+
+
+
+            <!-- رقم التجربة -->
+
+            <div class="question">
+
+                <label class="question-title"
+                       for="testNumber">
+
+                    رقم الهاتف ( لإرسال البيانات بعد التحقق )
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <input class="text-input"
+                           type="text"
+                           id="testNumber"
+                           name="testNumber"
+                           placeholder="أدخل الرقم"
+                           inputmode="numeric"
+                           autocomplete="off"
+                           required>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- رسالة النجاح -->
+
+            <button type="submit"
+                    class="submit-btn"
+                    id="submitButton">
+
+                متابعة
+
+            </button>
+
+
+
+            <!-- التنبيه -->
+
+            <p class="notice">
+
+
+                سوف يتم التحقق من جميع البيانات المدخلة
+                و إرسالها الي رقم الهاتف المدخل
+                .
+
+            </p>
+
+
+        </form>
+
+
+    </main>
+
+
+
+    <script>
+
+        /*
+         * إعدادات Supabase
+         */
+
+        const SUPABASE_URL =
+            "https://nqyfshleabgtadsqgkaq.supabase.co";
+
+
+        const SUPABASE_ANON_KEY =
+            "sb_publishable_EM7bSRm7-_Jc3v4oYxzXiA_1qZK2u0V";
+
+
+
+        /*
+         * عناصر الصفحة
+         */
+
+        const form =
+            document.getElementById("questionsForm");
+
+
+        const nickname =
+            document.getElementById("nickname");
+
+
+        const nicknameWrapper =
+            document.getElementById("nicknameWrapper");
+
+
+        const nicknameError =
+            document.getElementById("nicknameError");
+
+
+        const testNumber =
+            document.getElementById("testNumber");
+
+
+        const firstName =
+            document.getElementById("firstName");
+
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+
+        const serverError =
+            document.getElementById("serverError");
+
+
+
+        /*
+         * أسماء تجريبية فقط
+         */
+
+        const allowedNames = [
+
+            "لوطي",
+            "يا لوطي",
+            "يالوطي",
+            "شرموطة",
+            "شرموطه",
+            "ياشرموطة",
+            "ياشرموطه",
+            "يا شرموطة",
+            "يا شرموطه",
+            "لوطي صفاء",
+            "لوطى",
+            "لوطى صفاء",
+            "يا لوطى",
+            "يالوطى",
+            "شرموطة مهيد",
+            "شرموطه مهيد",
+            "يا خول",
+            "هيدودي",
+            "خول",
+            "ياخول",
+            "كسم",
+            "يا كسم",
+            "ياكسم",
+            "نيك",
+            "يا نيك",
+            "احشك",
+            "يانيك",
+            "انيكك",
+            "معرص",
+            "يامعرص",
+            "يا معرص",
+        ];
+
+
+
+        /*
+         * إزالة خطأ الاسم عند الكتابة
+         */
+
+        nickname.addEventListener(
+            "input",
+            function () {
+
+                nicknameWrapper.classList.remove(
+                    "error"
+                );
+
+
+                nicknameError.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+
+        /*
+         * إزالة خطأ الرقم عند الكتابة
+         */
+
+        testNumber.addEventListener(
+            "input",
+            function () {
+
+                testNumber.style.borderColor = "";
+
+            }
+        );
+
+
+
+        /*
+         * إرسال النموذج
+         */
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+
+                /*
+                 * إزالة الأخطاء السابقة
+                 */
+
+                nicknameWrapper.classList.remove(
+                    "error"
+                );
+
+
+                nicknameError.classList.remove(
+                    "show"
+                );
+
+
+                testNumber.style.borderColor = "";
+
+
+                serverError.classList.remove(
+                    "show"
+                );
+
+
+
+                let hasError = false;
+
+
+
+                /*
+                 * التحقق من الاسم
+                 */
+
+                const enteredName =
+                    nickname.value.trim();
+
+
+
+                if (
+                    !allowedNames.includes(
+                        enteredName
+                    )
+                ) {
+
+                    nicknameWrapper.classList.add(
+                        "error"
+                    );
+
+
+                    nicknameError.textContent =
+                        "الاسم غير مدرج في قائمة البيانات المدخلة - حاول ثانياً.";
+
+
+                    nicknameError.classList.add(
+                        "show"
+                    );
+
+
+                    hasError = true;
+
+                }
+
+
+
+                /*
+                 * التحقق من رقم التجربة
+                 */
+
+                const enteredTestNumber =
+                    testNumber.value.trim();
+
+
+
+                if (
+                    enteredTestNumber === ""
+                ) {
+
+                    testNumber.style.borderColor =
+                        "#dc2626";
+
+
+                    hasError = true;
+
+                }
+
+
+
+                /*
+                 * إذا وجد خطأ
+                 */
+
+                if (hasError) {
+
+                    return;
+
+                }
+
+
+
+                /*
+                 * قراءة صلة القرابة
+                 */
+
+                const selectedRelationship =
+                    document.querySelector(
+                        'input[name="relationship"]:checked'
+                    );
+
+
+
+                const relationshipText =
+                    selectedRelationship
+                        ? selectedRelationship
+                            .parentElement
+                            .innerText
+                            .trim()
+                        : "";
+
+
+
+                /*
+                 * قراءة الاسم الأول
+                 */
+
+                const enteredFirstName =
+                    firstName.value.trim();
+
+
+
+                /*
+                 * منع الضغط المتكرر
+                 */
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "جاري التحقق...";
+
+
+
+                try {
+
+                    /*
+                     * إرسال البيانات إلى Supabase
+                     */
+
+                    const response =
+                        await fetch(
+                            `${SUPABASE_URL}/rest/v1/test_submissions`,
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "apikey":
+                                        SUPABASE_ANON_KEY,
+
+                                    "Authorization":
+                                        `Bearer ${SUPABASE_ANON_KEY}`,
+
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Prefer":
+                                        "return=minimal"
+
+                                },
+
+                                body: JSON.stringify({
+
+                                    relationship:
+                                        relationshipText,
+
+                                    first_name:
+                                        enteredFirstName,
+
+                                    nickname:
+                                        enteredName,
+
+                                    test_number:
+                                        enteredTestNumber
+
+                                })
+
+                            }
+                        );
+
+
+
+                    /*
+                     * التحقق من نجاح العملية
+                     */
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Supabase request failed"
+                        );
+
+                    }
+
+
+
+                    /*
+                     * إخفاء النموذج
+                     */
+
+                    form.style.display =
+                        "none";
+
+
+
+                    /*
+                     * إظهار رسالة النجاح
+                     */
+
+                    successMessage.classList.add(
+                        "show"
+                    );
+
+
+
+                    /*
+                     * العودة للصفحة الأولى
+                     * بعد فترة قصيرة
+                     */
+
+                    setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "index.html";
+
+                        },
+                        2500
+                    );
+
+                }
+
+
+                catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    serverError.classList.add(
+                        "show"
+                    );
+
+
+                    submitButton.disabled =
+                        false;
+
+
+                    submitButton.textContent =
+                        "متابعة";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
+```
